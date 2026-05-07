@@ -1,0 +1,25 @@
+# Optional but recommended. After `pip install pre-commit && pre-commit install`,
+# these checks run automatically before every git commit.
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+      - id: black
+        language_version: python3.11
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.9.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - pydantic>=2.6.0
+          - pandas-stubs>=2.2.0
+        args: [--config-file=pyproject.toml]
+        # mypy needs the package importable; point it at src/.
+        files: ^src/

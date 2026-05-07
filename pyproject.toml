@@ -1,0 +1,117 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ds_project"
+version = "0.1.0"
+description = "A basic data science project demonstrating production Python practices"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+license = { text = "MIT" }
+dependencies = [
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    "scikit-learn>=1.4.0",
+    "pydantic>=2.6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.3.0",
+    "ruff>=0.3.0",
+    "mypy>=1.9.0",
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pandas-stubs>=2.2.0",
+    "types-requests>=2.31.0",
+]
+
+[project.scripts]
+ds-train = "ds_project.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# ---------------------------------------------------------------------------
+# Black: opinionated code formatter
+# ---------------------------------------------------------------------------
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+include = '\.pyi?$'
+
+# ---------------------------------------------------------------------------
+# Ruff: fast linter (and import sorter, replacing isort)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+# A curated, sensible default set. Add more as you grow comfortable.
+#   E, W   = pycodestyle errors / warnings
+#   F      = pyflakes (unused imports, undefined names, etc.)
+#   I      = isort (import ordering)
+#   B      = flake8-bugbear (likely bugs)
+#   UP     = pyupgrade (modernize syntax for target Python)
+#   SIM    = flake8-simplify
+#   N      = pep8-naming
+#   D      = pydocstyle (docstring conventions)
+#   ANN    = flake8-annotations (require type hints)
+#   RUF    = ruff-specific rules
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "N", "D", "ANN", "RUF"]
+ignore = [
+    "D203",  # 1 blank line required before class docstring (conflicts with D211)
+    "D213",  # Multi-line docstring summary should start at the second line
+    "ANN101", # Missing type annotation for `self`
+    "ANN102", # Missing type annotation for `cls`
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests don't need docstrings or strict annotations on every fixture.
+"tests/**/*.py" = ["D", "ANN"]
+# __init__ files often re-export.
+"**/__init__.py" = ["D104", "F401"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+# Use ruff format only if you don't run Black. Here Black is the formatter,
+# so we keep ruff focused on linting. Setting this matches Black's style
+# in case you ever drop Black later.
+quote-style = "double"
+indent-style = "space"
+
+# ---------------------------------------------------------------------------
+# Mypy: static type checker
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.11"
+files = ["src", "tests"]
+strict = true                       # Enables a strong default set of checks
+warn_unreachable = true
+warn_return_any = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+pretty = true
+
+# Many data-science libraries lack type stubs. Silence those imports rather
+# than fight them. Add specific modules here as you encounter them.
+[[tool.mypy.overrides]]
+module = ["sklearn.*", "scipy.*"]
+ignore_missing_imports = true
+
+# ---------------------------------------------------------------------------
+# Pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra --strict-markers --cov=ds_project --cov-report=term-missing"
+testpaths = ["tests"]
