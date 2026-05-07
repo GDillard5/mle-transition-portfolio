@@ -8,3 +8,7 @@ The duties and skills of a Data Scientist and Machine Learning Engineer differ e
 
 **What is this repo?**
 This repository is both a log and storage space to show off what I've learned on my journey to become a machine learning engineer. You can click through the various sub-projects to see what I did and what I learned. I also include summaries in this README.
+
+**ds_project**\n
+After reading the insights in "Hitchhiker's Guide to Python", I wanted to use the info to make a standard project using industry tools I've never used before. Productions tools like MyPy, PyLint, Black, .toml files, and MakeFiles are foreign to me as a Data Scientist who primarily worked in notebook based environments. I had Claude Code create a basic Data Science project then add random typing and project structure errors so I would FORCED to used these tools to find the issues and resolve them. After a little struggle with understanding MyPy errors, I managed to resolve the errors, run the project, and ensure it works as intended.
+
